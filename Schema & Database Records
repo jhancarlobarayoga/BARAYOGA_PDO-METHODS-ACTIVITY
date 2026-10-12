@@ -1,3 +1,4 @@
+-- SQL SCHEMA
 CREATE TABLE grocery_items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
     brand_name VARCHAR(100),
@@ -12,6 +13,8 @@ CREATE TABLE grocery_items (
     country_of_origin VARCHAR(50)
 );
 
+
+-- SQL DATABASE
 INSERT INTO grocery_items
 (brand_name, product_name, category, unit_size, unit_price, stock_quantity, supplier_name, manufacture_date, expiry_date, country_of_origin)
 VALUES
