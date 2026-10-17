@@ -1,1 +1,192 @@
+-- 5.	SHOW CODE DEMONSTRATING FETCH_ALL(). USE PRINT_R(). WITH “<pre>” TAG IN BETWEEN. 
+<?php
+// Database connection
+require_once("dbconfig.php");
+// SQL query to retrieve all grocery items
+$sql = "SELECT * FROM grocery_items";
+// Prepare query
+$stmt = $pdo->prepare($sql);
+// Execute query
+$stmt->execute();
+// Fetch all records
+$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Display records using print_r()
+echo "<pre>";
+print_r($items);
+echo "</pre>";
+?>
 
+-- 6.	SHOW CODE DEMONSTRATING HOW FETCH() IS USED. USE PRINT_R(). WITH “<pre>” TAG IN BETWEEN.
+<?php
+// Database connection
+require_once("dbconfig.php");
+// SQL query
+$sql = "SELECT * FROM grocery_items";
+// Prepare query
+$stmt = $pdo->prepare($sql);
+// Execute query
+$stmt->execute();
+// Fetch only one row
+$item = $stmt->fetch(PDO::FETCH_ASSOC);
+// Display result
+echo "<pre>";
+print_r($item);
+echo "</pre>";
+?>
+
+-- 7.	SHOW CODE DEMONSTRATING INSERTION OF RECORD TO YOUR DATABASE
+<?php
+// Include database connection
+require_once("dbconfig.php");
+// Data to be inserted
+$data = [
+   ':brand_name' => 'Grace',
+   ':product_name' => 'Grace Tomato Ketchup',
+   ':category' => 'Condiments',
+   ':unit_size' => '500ml',
+   ':unit_price' => 2.99,
+   ':stock_quantity' => 100,
+   ':supplier_name' => 'GraceKennedy Foods',
+   ':manufacture_date' => '2026-01-01',
+   ':expiry_date' => '2027-01-01',
+   ':country_of_origin' => 'Jamaica'
+];
+// Display array used in insertion
+echo "<h2>Insert Array</h2>";
+echo "<pre>";
+print_r($data);
+echo "</pre>";
+$sql = "INSERT INTO grocery_items
+(
+   brand_name,
+   product_name,
+   category,
+   unit_size,
+   unit_price,
+   stock_quantity,
+   supplier_name,
+   manufacture_date,
+   expiry_date,
+   country_of_origin
+)
+VALUES
+(
+   :brand_name,
+   :product_name,
+   :category,
+   :unit_size,
+   :unit_price,
+   :stock_quantity,
+   :supplier_name,
+   :manufacture_date,
+   :expiry_date,
+   :country_of_origin
+)";
+$stmt = $pdo->prepare($sql);
+$stmt->execute($data);
+echo "<br>Record inserted successfully.";
+?>
+
+-- 8.	SHOW CODE DEMONSTRATING DELETION OF RECORD TO YOUR DATABASE
+<?php
+// Include database connection
+require_once("dbconfig.php");
+// Array used for deletion
+$data = [
+   ':item_id' => 1
+];
+// Display array
+echo "<h2>Delete Array</h2>";
+echo "<pre>";
+print_r($data);
+echo "</pre>";
+$sql = "DELETE FROM grocery_items
+       WHERE item_id = :item_id";
+$stmt = $pdo->prepare($sql);
+$stmt->execute($data);
+echo "<br>Record deleted successfully.";
+?>
+
+-- 9.	SHOW CODE DEMONSTRATING UPDATING OF RECORD FROM YOUR DATABASE
+<?php
+// Database connection
+require_once("dbconfig.php");
+// SQL Update Statement
+$sql = "UPDATE grocery_items
+       SET unit_price = :unit_price,
+           stock_quantity = :stock_quantity
+       WHERE item_id = :item_id";
+// Prepare statement
+$stmt = $pdo->prepare($sql);
+// Execute update
+$stmt->execute([
+   ':unit_price' => 3.99,
+   ':stock_quantity' => 150,
+   ':item_id' => 1
+]);
+echo "Record updated successfully.";
+?>
+
+-- 10.	SHOW CODE DEMONSTRATING AN SQL QUERY’S RESULT SET IS RENDERED ON AN HTML TABLE
+<?php
+// Database Connection
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "jamaica_grocery_db";
+try {
+   $pdo = new PDO(
+       "mysql:host=$host;dbname=$database",
+       $username,
+       $password
+   );
+   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+   die("Connection failed: " . $e->getMessage());
+}
+// Retrieve all records
+$sql = "SELECT * FROM grocery_items";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Jamaica Grocery Items</title>
+   <style>
+       table{
+           border-collapse: collapse;
+           width:100%;
+       }
+       th, td{
+           border:1px solid black;
+           padding:8px;
+       }
+       th{
+           background-color:lightgray;
+       }
+   </style>
+</head>
+<body>
+<h2>Jamaica Grocery Items</h2>
+<table>
+   <tr>
+       <th>Brand Name</th>
+       <th>Product Name</th>
+       <th>Category</th>
+       <th>Unit Price</th>
+       <th>Stock Quantity</th>
+   </tr>
+   <?php foreach($items as $item): ?>
+   <tr>
+       <td><?php echo $item['brand_name']; ?></td>
+       <td><?php echo $item['product_name']; ?></td>
+       <td><?php echo $item['category']; ?></td>
+       <td><?php echo $item['unit_price']; ?></td>
+       <td><?php echo $item['stock_quantity']; ?></td>
+   </tr>
+   <?php endforeach; ?>
+</table>
+</body>
+</html>
