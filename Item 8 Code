@@ -1,0 +1,21 @@
+<?php
+
+require_once("dbconfig.php");
+
+$data = [
+   ':item_id' => 1
+];
+
+echo "<h2>Delete Array</h2>";
+echo "<pre>";
+print_r($data);
+echo "</pre>";
+
+$sql = "DELETE FROM grocery_items
+       WHERE item_id = :item_id";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($data);
+echo "<br>Record deleted successfully.";
+
+?>
