@@ -1,0 +1,53 @@
+<?php
+
+require_once("dbconfig.php");
+
+$data = [
+   ':brand_name' => 'Grace',
+   ':product_name' => 'Grace Tomato Ketchup',
+   ':category' => 'Condiments',
+   ':unit_size' => '500ml',
+   ':unit_price' => 2.99,
+   ':stock_quantity' => 100,
+   ':supplier_name' => 'GraceKennedy Foods',
+   ':manufacture_date' => '2026-01-01',
+   ':expiry_date' => '2027-01-01',
+   ':country_of_origin' => 'Jamaica'
+];
+
+echo "<h2>Insert Array</h2>";
+echo "<pre>";
+print_r($data);
+echo "</pre>";
+$sql = "INSERT INTO grocery_items
+(
+   brand_name,
+   product_name,
+   category,
+   unit_size,
+   unit_price,
+   stock_quantity,
+   supplier_name,
+   manufacture_date,
+   expiry_date,
+   country_of_origin
+)
+VALUES
+(
+   :brand_name,
+   :product_name,
+   :category,
+   :unit_size,
+   :unit_price,
+   :stock_quantity,
+   :supplier_name,
+   :manufacture_date,
+   :expiry_date,
+   :country_of_origin
+)";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($data);
+echo "<br>Record inserted successfully.";
+
+?>
