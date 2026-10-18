@@ -1,0 +1,20 @@
+<?php
+
+require_once("dbconfig.php");
+
+$sql = "UPDATE grocery_items
+       SET unit_price = :unit_price,
+           stock_quantity = :stock_quantity
+       WHERE item_id = :item_id";
+
+$stmt = $pdo->prepare($sql);
+
+$stmt->execute([
+   ':unit_price' => 3.99,
+   ':stock_quantity' => 150,
+   ':item_id' => 1
+]);
+
+echo "Record updated successfully.";
+
+?>
