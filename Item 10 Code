@@ -1,0 +1,65 @@
+<?php
+
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "jamaica_grocery_db";
+
+try {
+   $pdo = new PDO(
+       "mysql:host=$host;dbname=$database",
+       $username,
+       $password
+   );
+   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+   die("Connection failed: " . $e->getMessage());
+}
+
+$sql = "SELECT * FROM grocery_items";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Jamaica Grocery Items</title>
+   <style>
+       table{
+           border-collapse: collapse;
+           width:100%;
+       }
+       th, td{
+           border:1px solid black;
+           padding:8px;
+       }
+       th{
+           background-color:lightgray;
+       }
+   </style>
+</head>
+
+<body>
+<h2>Jamaica Grocery Items</h2>
+<table>
+   <tr>
+       <th>Brand Name</th>
+       <th>Product Name</th>
+       <th>Category</th>
+       <th>Unit Price</th>
+       <th>Stock Quantity</th>
+   </tr>
+   <?php foreach($items as $item): ?>
+   <tr>
+       <td><?php echo $item['brand_name']; ?></td>
+       <td><?php echo $item['product_name']; ?></td>
+       <td><?php echo $item['category']; ?></td>
+       <td><?php echo $item['unit_price']; ?></td>
+       <td><?php echo $item['stock_quantity']; ?></td>
+   </tr>
+   <?php endforeach; ?>
+</table>
+</body>
+</html>
